@@ -1,4 +1,4 @@
-package com.bezy.foodapi.request;
+package com.bezy.foodapi.io;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
