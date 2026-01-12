@@ -1,4 +1,10 @@
 package com.bezy.foodapi.service;
 
-public class UserService {
+import com.bezy.foodapi.io.UserRequest;
+import com.bezy.foodapi.io.UserResponse;
+
+public interface UserService {
+
+    UserResponse registerUser(UserRequest request);
+    String findByUserId();
 }
