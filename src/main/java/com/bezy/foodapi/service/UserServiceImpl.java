@@ -5,8 +5,6 @@ import com.bezy.foodapi.io.UserRequest;
 import com.bezy.foodapi.io.UserResponse;
 import com.bezy.foodapi.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
