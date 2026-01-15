@@ -1,12 +1,8 @@
 package com.bezy.foodapi.controller;
 
 import com.bezy.foodapi.entity.OrderEntity;
-import com.bezy.foodapi.io.OrderRequest;
 import com.bezy.foodapi.io.OrderResponse;
 import com.bezy.foodapi.service.OrderService;
-import com.bezy.foodapi.service.OrderServiceImpl;
-import com.paypal.api.payments.*;
-import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
