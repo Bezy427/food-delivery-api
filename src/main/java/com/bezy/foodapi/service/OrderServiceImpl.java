@@ -20,8 +20,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final String CLIENT_ID = "AWWt-hlb617yG-dOfsad5JVisXrX3O38SplfQCDTuea4wK73GWKoISKwgaaChmxjRvjNIOfY_-TUF5P4";
-    private final String CLIENT_SECRET = "EARo-1NEYZ8A8_UsBVSfCOvMIMU7vlCVNy2obksc3LKdIgUAtsGyRWSEcuHrqWg6aMcxVifjdW3-_c0s";
+    private final String CLIENT_ID = "";
+    private final String CLIENT_SECRET = "";
     private final String MODE = "sandbox"; // change to "live" for production
     private final CartRepository cartRepository;
     private UserService userService;
@@ -32,17 +32,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse createOrderWithPayment(OrderEntity request) {
-        // 1️⃣ Save order in DB with initial status
         OrderEntity newOrder = convertToEntity(request);
         newOrder = orderRepository.save(newOrder);
 
         try {
-            // 2️⃣ Create PayPal Amount object
             Amount amount = new Amount();
             amount.setCurrency("USD");
             amount.setTotal(String.format("%.2f", request.getAmount()));
 
-            // 3️⃣ Create Transaction and attach DB order ID as invoiceNumber
             Transaction transaction = new Transaction();
             transaction.setDescription("Order Payment");
             transaction.setAmount(amount);
@@ -50,33 +47,27 @@ public class OrderServiceImpl implements OrderService {
 
             List<Transaction> transactions = List.of(transaction);
 
-            // 4️⃣ Set up Payer
             Payer payer = new Payer();
             payer.setPaymentMethod("paypal");
 
-            // 5️⃣ Create Payment
             Payment payment = new Payment();
             payment.setIntent("sale");
             payment.setPayer(payer);
             payment.setTransactions(transactions);
 
-            // 6️⃣ Set redirect URLs
             RedirectUrls redirectUrls = new RedirectUrls();
             redirectUrls.setCancelUrl("http://localhost:5137/cancel");
             redirectUrls.setReturnUrl("http://localhost:5137/success");
             payment.setRedirectUrls(redirectUrls);
 
-            // 7️⃣ Create payment
             Payment createdPayment = payment.create(getApiContext());
 
-            // 8️⃣ Extract approval URL
             String approvalUrl = createdPayment.getLinks().stream()
                     .filter(link -> "approval_url".equals(link.getRel()))
                     .map(Links::getHref)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("No approval URL found"));
 
-            // 9️⃣ Return OrderResponse with DB order ID and approval URL
             return OrderResponse.builder()
                     .orderId(String.valueOf(newOrder.getId()))
                     .paymentApprovalUrl(approvalUrl)
