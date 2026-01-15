@@ -1,6 +1,5 @@
 package com.bezy.foodapi.service;
 
-import com.bezy.foodapi.entity.UserEntity;
 import com.bezy.foodapi.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;
